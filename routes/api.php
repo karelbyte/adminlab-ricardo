@@ -174,5 +174,6 @@ Route::prefix('quotes')->group(function () {
     Route::post('update', 'QuoteController@update');
     Route::post('eraser', 'QuoteController@destroy');
     Route::get('resources', 'QuoteController@resources');
+    Route::post('generate-service', 'QuoteController@generateService');
 });
 

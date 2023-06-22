@@ -206,6 +206,7 @@ class ServiceController extends Controller
     }
 
     public function sendMail(Request $request) {
+      
     
         $data = Service::query()->with(['analysis' => function($q) {
             $q->with('analysis');
@@ -330,25 +331,13 @@ class ServiceController extends Controller
                     ->setOption('header-html', $header)
                     ->setOption('footer-html', $footer);
 
-                $pdf->save($path);
+               return   $pdf->inline();
 
-                $attachs[] = [
-                    $path,
-                    [
-                        'as' =>  $data->barcode. '-'. $detail->analysis->code. '.pdf',
-                        'mine' => 'application/pdf'
-                    ]
-                ];
+        
 
             }
 
-            $data = [
-                'data' => $data,
-                'attachs' => $attachs
-            ];
-
-            Mail::to($mail)->send(new ClientServiceResult($data));
-            return response()->json('Datos enviados al cliente.');
+           
         }
 
 

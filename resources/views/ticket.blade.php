@@ -235,6 +235,10 @@
         {!! DNS1D::getBarcodeSVG($data->barcode, 'C128', 2,63, 'black', false)!!}
         <p>{{$data->barcode}}</p>
     </div>
+    <div style="margin:10px 10px 10px 20px;">
+        {!! DNS2D::getBarcodeSVG('http://laboratorioclinicointegral.com/', 'QRCODE', 5, 5)!!}
+      
+    </div>
    
     <div class="txt-center" style="margin:30px 0 40px 0">
         <div class="row">

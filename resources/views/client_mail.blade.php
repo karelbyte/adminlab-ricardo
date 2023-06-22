@@ -114,6 +114,9 @@
         {!! DNS1D::getBarcodeSVG('GD04RNQ', 'C128', 2,63, 'black', false)!!}
         <p>GD04RNQ</p>
     </div>
+    <div style="margin:10px 10px 10px 20px;">
+        {!! DNS2D::getBarcodeSVG('http://laboratorioclinicointegral.com/', 'QRCODE')!!} 
+    </div>
     <div class="txt-center" style="margin:30px 0 40px 0">
         <div class="row">
             <h4>LOS RESULTADOS SE ADJUNTAN EN UN DOCUMENTO PDF</h1>

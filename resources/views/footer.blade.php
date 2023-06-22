@@ -13,6 +13,9 @@
 <body>
 
 <div style="display: block;  width: 100%; overflow:hidden;">
+    <div style="float: left; width:30%; text-align: left;padding-top: 70px">
+    {!! DNS2D::getBarcodeSVG('http://laboratorioclinicointegral.com/', 'QRCODE', 4, 4)!!} 
+    </div>
     <div style="float: right; width:30%; text-align: center;">
         <img src="{{asset('back/firma.jpg')}}"  width="290px" alt="">
         <div style="border-top: 1px solid #032b79;"> </div>

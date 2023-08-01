@@ -1,5 +1,5 @@
-// export const ApiUrl = 'http://lab21012021.test/api'
-export const ApiUrl = 'http://adminlab.test/api'
+export const ApiUrl = 'http://lab.jet/api'
+// export const ApiUrl = 'http://adminlab.test/api'
 
 export const onview = function (pro, v) {
   for (let property in v) {

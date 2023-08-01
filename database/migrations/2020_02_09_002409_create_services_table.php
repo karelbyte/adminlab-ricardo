@@ -28,6 +28,7 @@ class CreateServicesTable extends Migration
             $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('price', 10, 2)->default(0);
             $table->decimal('advance', 10, 2)->default(0);
+            $table->string('url')->nullable();;
             $table->tinyInteger('status_id');
             $table->timestamps();
             $table->engine = 'InnoDB';

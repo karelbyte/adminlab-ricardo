@@ -11,14 +11,13 @@ use App\Models\Analyses;
 use App\Models\Location;
 use App\Models\Surrogate;
 use Illuminate\Http\Request;
+use GuzzleHttp\Client as Guz;
 use App\Models\ServiceDetails;
 use App\Mail\ClientServiceResult;
-use Spatie\Dropbox\Client as Dbox;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ServicesResource;
-use GuzzleHttp\Client as Guz;
 
 class ServiceController extends Controller
 {
@@ -91,22 +90,20 @@ class ServiceController extends Controller
         $footer = view('footer')->render();
         $header = view('header')->render();
 
-        $client = new Dbox(config('services.dropbox.token'));
-
         $pdf = \App::make('snappy.pdf.wrapper');
         $pdf->setTimeout(120);
+        $clientGuz = new Guz();
 
+        $client = Client::query()->find($data->client_id);
+        $name = $client->names;
+        $age = $this->getAge($client->birthday);
+        $doctor = (Doctor::query()->find($data->doctor_id))->names;
 
         foreach ($data->analysis as $key => $detail) {
             $nameFile = $data->barcode . '-' . $detail->analysis->code . now()->timestamp . '.pdf';
             $path = storage_path('app/docs/services/' . $nameFile);
-            $doctor = (Doctor::query()->find($data->doctor_id))->names;
             $moment = $data->moment;
             $code = $data->barcode;
-            $client = Client::query()->find($data->client_id);
-            $name = $client->names;
-            $age = $this->getAge($client->birthday);
-
             if ($detail->head == 0) {
                 $heads = '<span  style="margin-left:200px"><span  style="margin-right:30px">MEDICO:</span> <b>' . $doctor . '</b></span><br>'
                     . '<span  style="margin-left:200px"><span  style="margin-right:39px">FECHA:</span> <b>' . $moment . '</b></b></span><br>'
@@ -118,26 +115,16 @@ class ServiceController extends Controller
                 $content = $detail->content;
             }
 
-
-
             $pdf->loadHtml($content)
                 ->setOption('header-html', $header)
                 ->setOption('footer-html', $footer);
 
             $pdf->save($path);
 
-            $contenido = file_get_contents($path);
+            $url = 'https://storelab.laboratorioclinicointegral.com/api/store';
 
-            //$accessToken = config('services.dropbox.token');
 
-            // URL de la API de Dropbox para subir archivos
-            //$url = 'https://content.dropboxapi.com/2/files/upload';
-
-            $url = 'http://storelab.jet/api/store';
-
-            // Configurar el encabezado de la solicitud
-            $client = new Guz();
-            $response = $client->post($url, [
+            $response = $clientGuz->post($url, [
                 'multipart' => [
                     [
                         'name'     => 'file',
@@ -146,42 +133,40 @@ class ServiceController extends Controller
                 ]
             ]);
 
-            $data = json_decode($response->getBody(), true);
-            $namePublico = $data['name'];
-
-
-            // $urlObtenerEnlace = 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings';
-
-            // $headersObtenerEnlace = [
-            //     'Authorization' => 'Bearer ' . $accessToken,
-            //     'Content-Type' => 'application/json',
-            // ];
-
-            // $bodyObtenerEnlace = json_encode([
-            //     'path' => $namePublico,
-            // ]);
-
-            // $responseObtenerEnlace = $client->post($urlObtenerEnlace, [
-            //     'headers' => $headersObtenerEnlace,
-            //     'body' => $bodyObtenerEnlace,
-            // ]);
-
-            // $dataObtenerEnlace = json_decode($responseObtenerEnlace->getBody(), true);
-
-            // $enlacePublicoDescarga = $dataObtenerEnlace['url'];
+            $dataResult = json_decode($response->getBody(), true);
+            $namePublico = $dataResult['name'];
 
             $attachs[] = [
-                'path' . $key => 'http://storelab.jet/storage/' . $namePublico
+                'path' . $key => 'https://storelab.laboratorioclinicointegral.com/storage/' . $namePublico
             ];
         }
 
+
+        $url = 'https://storelab.laboratorioclinicointegral.com/api/store-service';
+
+        $clientGuz->post($url, [
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+
+                'client_id' => $data->client_id,
+                'name' => $client->names,
+                'telf' => $client->telf,
+                'barcode' => $data->barcode,
+                'status_id' => 2,
+                'urls' => $attachs,
+            ]
+        ]);
+
+
         $service = Service::query()->find($request->id);
-        // $service->status_id = 2;
+        $service->status_id = 2;
         $service->urls = $attachs;
         $service->advance = $service->price;
         $service->save();
 
-        return response()->json('Se cambio el estado del servicio a entregado!'); // 
+        return response()->json('Se cambio el estado del servicio a entregado!');
     }
 
     public function storeContent(Request $request)

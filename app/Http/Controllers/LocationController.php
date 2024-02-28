@@ -74,7 +74,7 @@ class LocationController extends Controller
     public function report($id) {
 
         $data = Location::with(['services' => function ($q) {
-            $q->with('client')->groupBy('client_id','id');
+            $q->with('analysis')->with('client')->groupBy('client_id','id')->orderBy('moment', 'desc');
         }])->where('id', $id)->first();
 
 

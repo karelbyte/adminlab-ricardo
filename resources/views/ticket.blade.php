@@ -19,6 +19,9 @@
         .txt-center {
             text-align: center;
         }
+        .txt-justify {
+            text-align: justify;
+        }
         .border {
             border-top: 5px dotted black;
             border-bottom: 5px dotted black;
@@ -228,6 +231,11 @@
         </div>
         @endif
     </div>
+    <div style="margin:30px 10px 40px 10px" class="txt-justify">
+       Le sugerimos nuestro servicio de entrega de resultados via <b>Whatsapp</b>, registre nuestro número <b>+52 755 102 1726</b> y salude "Hola".
+       <br>Utilice su codigo de servicio <b>{{$data->barcode}}</b><br>
+       Nuestro bot le indicará que hacer para obtener sus resultados.
+    </div>
     <div style="border-bottom: 1px solid black; margin-top: -10px;"></div>
     <div class="clear"></div>
     <div class="txt-center" >
@@ -236,7 +244,7 @@
         <p>{{$data->barcode}}</p>
     </div>
     <div style="margin:10px 10px 10px 20px;">
-        {!! DNS2D::getBarcodeSVG('http://laboratorioclinicointegral.com/', 'QRCODE', 5, 5)!!}
+        {!! DNS2D::getBarcodeSVG('http://laboratorioclinicointegral.com/services-admin/'.$data->barcode, 'QRCODE', 5, 5)!!}
       
     </div>
    

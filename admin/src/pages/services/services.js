@@ -281,7 +281,8 @@ export default {
       showPrintNote: false,
       iframe: '',
       fixDescription: false,
-      showEmail: false
+      showEmail: false,
+      showChangeStatus: false
     }
   },
   watch: {
@@ -363,11 +364,16 @@ export default {
       }
     },
     changeStatusService (itm) {
+      this.showChangeStatus = true
       this.$axios.post(ApiUrl + '/services/set-status', { id: itm.id }).then(res => {
+        this.showChangeStatus = false
         this.$noty.positive(res.data)
         this.getList({
           pagination: this.pagination
         })
+      }).catch(er => {
+        this.showChangeStatus = false
+        this.$noty.negative(er.response.data)
       })
     },
     showEditorAnalysis (analysisId, status) {

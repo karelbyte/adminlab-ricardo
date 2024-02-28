@@ -701,6 +701,22 @@
         <q-separator />
       </q-card>
     </q-dialog>
+
+    <q-dialog
+      v-model="showChangeStatus"
+      persistent
+      transition-show="scale"
+      transition-hide="scale"
+    >
+      <q-card style="width: 400px; max-width: 80vw">
+        <q-card-section class="bg-blue-5 text-center"> Generando resultados, actualizando bot, cambiando estado a entregado... </q-card-section>
+        <q-separator />
+        <q-card-section class="text-center">
+          <q-spinner color="primary" size="3em" />
+        </q-card-section>
+        <q-separator />
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 

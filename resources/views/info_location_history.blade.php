@@ -24,6 +24,7 @@
              <tr>
                  <th>FECHA</th>
                  <th>NOMBRE</th>
+                 <th>SERVICIOS DESCRIPCION</th>
                  <th>SERVICIOS</th>
                  <th>MONTO</th>
              </tr>
@@ -32,7 +33,14 @@
            <tr>
                <td>{{Illuminate\Support\Carbon::parse($item->moment)->format('d-m-Y')}}</td>
                <td>{{$item->client->names}}</td>
-               <td style="text-align: center">{{$item->client->servicesCount}}</td>
+               <td style="text-align: center">
+                @foreach($item->analysis as $itemAnalysis)
+                 <p>{{$itemAnalysis->description}}</p>
+                @endforeach
+               </td>
+               <td style="text-align: center">
+                {{$item->client->servicesCount}}
+               </td>
                <td style="text-align: center">{{$item->total()}}</td>
            </tr>
            @endforeach

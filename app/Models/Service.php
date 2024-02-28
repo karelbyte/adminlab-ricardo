@@ -19,7 +19,7 @@ class Service extends Model
      */
     protected $fillable = ['client_id', 'moment', 'doctor_id',  'location_id', 'price', 'note',
         'barcode', 'barcode_quantity',
-        'discount', 'advance', 'status_id',  'created_at', 'updated_at'];
+        'discount', 'advance', 'status_id', 'urls',  'created_at', 'updated_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

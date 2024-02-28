@@ -11,8 +11,10 @@ use App\Models\Analyses;
 use App\Models\Location;
 use App\Models\Surrogate;
 use Illuminate\Http\Request;
+use GuzzleHttp\Client as Guz;
 use App\Models\ServiceDetails;
 use App\Mail\ClientServiceResult;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ServicesResource;
@@ -72,11 +74,93 @@ class ServiceController extends Controller
         return response()->json($content);
     }
 
-    public function setStatus(Request $request) {
+    public function setStatus(Request $request)
+    {
+        $data = Service::query()->with(['analysis' => function ($q) {
+            $q->with('analysis');
+        }, 'client', 'doctor'])->find($request->id);
+
+        $attachs = [];
+        $footer = view('footer')->render();
+        $header = view('header')->render();
+
+        $pdf = \App::make('snappy.pdf.wrapper');
+        $pdf->setTimeout(120);
+        $clientGuz = new Guz();
+
+        $client = Client::query()->find($data->client_id);
+        $name = $client->names;
+        $age = $this->getAge($client->birthday);
+        $doctor = (Doctor::query()->find($data->doctor_id))->names;
+
+        foreach ($data->analysis as $key => $detail) {
+            $nameFile = $data->barcode . '-' . $detail->analysis->code . now()->timestamp . '.pdf';
+            $path = storage_path('app/docs/services/' . $nameFile);
+            $moment = $data->moment;
+            $code = $data->barcode;
+            if ($detail->head == 0) {
+                $heads = '<span  style="margin-left:200px"><span  style="margin-right:30px">MEDICO:</span> <b>' . $doctor . '</b></span><br>'
+                    . '<span  style="margin-left:200px"><span  style="margin-right:39px">FECHA:</span> <b>' . $moment . '</b></b></span><br>'
+                    . '<span  style="margin-left:200px"><span  style="margin-right:16px">PACIENTE:</span> <b>' . $name . '</b>&nbsp;&nbsp;</span><br>'
+                    . '<span  style="margin-left:200px"><span  style="margin-right:48px">EDAD:</span> <b>' . $age . ' A&Ntilde;OS</b>&nbsp;&nbsp;</span><br>'
+                    . '<span  style="margin-left:200px"><span  style="margin-right:41px">CLAVE:</span> <b>' . $code . '</b>&nbsp;&nbsp;</span>';
+                $content = $heads . $detail->content;
+            } else {
+                $content = $detail->content;
+            }
+
+            $pdf->loadHtml($content)
+                ->setOption('header-html', $header)
+                ->setOption('footer-html', $footer);
+
+            $pdf->save($path);
+
+            $url = 'https://storelab.laboratorioclinicointegral.com/api/store';
+
+
+            $response = $clientGuz->post($url, [
+                'multipart' => [
+                    [
+                        'name'     => 'file',
+                        'contents' => fopen($path, 'r')
+                    ],
+                ]
+            ]);
+
+            $dataResult = json_decode($response->getBody(), true);
+            $namePublico = $dataResult['name'];
+
+            $attachs[] = [
+                'path' . $key => 'https://storelab.laboratorioclinicointegral.com/storage/' . $namePublico,
+                'name'. $key  => $detail->analysis->description
+            ];
+        }
+
+
+        $url = 'https://storelab.laboratorioclinicointegral.com/api/store-service';
+
+        $clientGuz->post($url, [
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'json' => [
+
+                'client_id' => $data->client_id,
+                'name' => $client->names,
+                'telf' => $client->telf,
+                'barcode' => $data->barcode,
+                'status_id' => 2,
+                'urls' => $attachs,
+            ]
+        ]);
+
+
         $service = Service::query()->find($request->id);
         $service->status_id = 2;
+        $service->urls = $attachs;
         $service->advance = $service->price;
         $service->save();
+
         return response()->json('Se cambio el estado del servicio a entregado!');
     }
 

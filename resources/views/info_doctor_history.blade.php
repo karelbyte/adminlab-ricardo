@@ -20,20 +20,30 @@
 <h2>HISTORICO DE PACIENTES DEL DOCTOR </h2>
 <h3>{{$data->names}} </h3>
 <h4>Clientes: {{$data->clients}}</h4>
-       <table>
+<table>
            <thead>
              <tr>
-                 <th>NOMBRE</th>
+                 <th>FECHA</th>
+                 <th>CLIENTE</th>
+                 <th>CODIGO</th>
                  <th>SERVICIOS</th>
+                 <th>MONTO</th>
              </tr>
            </thead>
            @foreach($data->analysis as $item)
            <tr>
+               <td>{{Illuminate\Support\Carbon::parse($item->moment)->format('d-m-Y')}}</td>
+               <td>{{$item->barcode}}</td>
                <td>{{$item->client->names}}</td>
-               <td style="text-align: center">{{$item->client->servicesCount}}</td>
+               <td>
+                   @foreach($item->analysis as $key => $itm)
+                       <p>{{++$key}}# {{$itm->description}}</p>
+                   @endforeach
+               </td>
+               <td>{{$item->price}}</td>
            </tr>
            @endforeach
        </table>
-
+      
 </body>
 </html>

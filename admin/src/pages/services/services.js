@@ -6,10 +6,11 @@ import ClientAdd from '../../components/ClientAdd'
 import DoctorAdd from '../../components/DoctorAdd'
 import LocationAdd from '../../components/LocationAdd'
 import FormChangeServiceStatus from '../../components/FormChangeServiceStatus'
+import FormConfirmDelivery from '../../components/FormConfirmDelivery'
 export default {
   name: 'services',
   components: {
-    DeleteItem, 'barcode': VueBarcode, ClientAdd, DoctorAdd, LocationAdd, FormChangeServiceStatus, tinymce
+    DeleteItem, 'barcode': VueBarcode, ClientAdd, DoctorAdd, LocationAdd, FormChangeServiceStatus, tinymce, FormConfirmDelivery
   },
   data () {
     return {
@@ -273,6 +274,7 @@ export default {
         { name: 'actions', label: 'ACCIONES', field: '', align: 'center', headerClasses: 'bg-primary text-white' }
       ],
       showFormChangeStatusService: false,
+      showFormConfirmDelivery: false,
       locationsSearch: [],
       monthNames: ['E', 'F', 'MA', 'A', 'MY', 'J',
         'JL', 'AG', 'S', 'O', 'N', 'D'
@@ -360,7 +362,9 @@ export default {
         this.item = item
         this.showFormChangeStatusService = true
       } else {
-        this.changeStatusService(item)
+        this.item = item
+        this.showFormConfirmDelivery = true
+        // this.changeStatusService(item)
       }
     },
     changeStatusService (itm) {
@@ -609,6 +613,7 @@ export default {
         pagination: this.pagination
       })
       this.showFormChangeStatusService = false
+      this.showFormConfirmDelivery = false
     },
     eraserShow (itm) {
       this.item = { ...itm }

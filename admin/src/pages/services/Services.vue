@@ -636,6 +636,12 @@
       @update="getListUpdate"
       @close="showFormChangeStatusService = false"
     ></form-change-service-status>
+    <form-confirm-delivery
+      :show="showFormConfirmDelivery"
+      :item="item"
+      @update="getListUpdate"
+      @close="showFormConfirmDelivery = false"
+    ></form-confirm-delivery>
     <delete-item
       :showFormDelete="showFormDelete"
       :item="item"

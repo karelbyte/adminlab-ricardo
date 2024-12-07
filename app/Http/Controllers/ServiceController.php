@@ -134,9 +134,9 @@ class ServiceController extends Controller
                 'path' . $key => 'https://storelab.laboratorioclinicointegral.com/storage/' . $namePublico,
                 'name'. $key  => $detail->analysis->description
             ];
+
         }
-
-
+       
         $url = 'https://storelab.laboratorioclinicointegral.com/api/store-service';
 
         $clientGuz->post($url, [
@@ -153,7 +153,6 @@ class ServiceController extends Controller
                 'urls' => $attachs,
             ]
         ]);
-
 
         $service = Service::query()->find($request->id);
         $service->status_id = 2;

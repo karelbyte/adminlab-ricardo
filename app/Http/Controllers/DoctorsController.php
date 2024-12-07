@@ -84,7 +84,6 @@ class DoctorsController extends Controller
             $q->with('client');
         }])->where('id', $id)->first();
 
-
         $view = view('info_doctor_history', ['data' => $data])->render();
 
         return $view;

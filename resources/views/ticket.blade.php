@@ -232,7 +232,7 @@
         @endif
     </div>
     <div style="margin:30px 10px 40px 10px" class="txt-justify">
-       Le sugerimos nuestro servicio de entrega de resultados via <b>Whatsapp</b>, registre nuestro número <b>+52 755 102 1726</b> y salude "Hola".
+       Le sugerimos nuestro servicio de entrega de resultados via <b>Whatsapp</b>, registre nuestro número <b>+52 755 115 6499</b> y salude "Hola".
        <br>Utilice su codigo de servicio <b>{{$data->barcode}}</b><br>
        Nuestro bot le indicará que hacer para obtener sus resultados.
     </div>

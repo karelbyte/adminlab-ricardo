@@ -117,25 +117,27 @@ class ServiceController extends Controller
 
             $url = 'https://storelab.laboratorioclinicointegral.com/api/store';
 
+            $nombreArchivo = basename($path); 
 
             $response = $clientGuz->post($url, [
                 'multipart' => [
                     [
-                        'name'     => 'file',
-                        'contents' => fopen($path, 'r')
+                        'name' => 'file',
+                        'contents' => fopen($path, 'r'),
+                        'filename' => $nombreArchivo, 
                     ],
                 ]
             ]);
-
             $dataResult = json_decode($response->getBody(), true);
             $namePublico = $dataResult['name'];
-
+        
             $attachs[] = [
                 'path' . $key => 'https://storelab.laboratorioclinicointegral.com/storage/' . $namePublico,
                 'name'. $key  => $detail->analysis->description
             ];
 
         }
+       
        
         $url = 'https://storelab.laboratorioclinicointegral.com/api/store-service';
 

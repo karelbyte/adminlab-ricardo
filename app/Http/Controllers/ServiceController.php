@@ -49,6 +49,14 @@ class ServiceController extends Controller
         return $annos;
     }
 
+    public function setPrinted($id) {
+           $service = Service::query()->find($id);
+           $service->printed = true;
+           $service->save();
+
+        return response()->json('Se cambio a impreso!');
+    }
+
     public function getContent($id) {
         $cont = ServiceDetails::query()->find($id);
         $service = Service::query()->find($cont->service_id);
@@ -74,6 +82,8 @@ class ServiceController extends Controller
         return response()->json($content);
     }
 
+    #Tu IP:189.143.249.175
+
     public function setStatus(Request $request)
     {
         $data = Service::query()->with(['analysis' => function ($q) {
@@ -96,6 +106,7 @@ class ServiceController extends Controller
         foreach ($data->analysis as $key => $detail) {
             $nameFile = $data->barcode . '-' . $detail->analysis->code . now()->timestamp . '.pdf';
             $path = storage_path('app/docs/services/' . $nameFile);
+            Log::info($path);
             $moment = $data->moment;
             $code = $data->barcode;
             if ($detail->head == 0) {
@@ -120,6 +131,11 @@ class ServiceController extends Controller
             $nombreArchivo = basename($path); 
 
             $response = $clientGuz->post($url, [
+                'connect_timeout' => 20, // 20 segundos para conectar
+            'timeout'         => 60, // 60 segundos para terminar de subir cada archivo
+            'curl' => [
+                CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4, // Evita cuelgues de DNS en Valet Windows
+            ],
                 'multipart' => [
                     [
                         'name' => 'file',
@@ -137,11 +153,16 @@ class ServiceController extends Controller
             ];
 
         }
-       
-       
+        Log::info('los atachados');
+        Log::info($attachs);
         $url = 'https://storelab.laboratorioclinicointegral.com/api/store-service';
 
         $clientGuz->post($url, [
+            'connect_timeout' => 15,
+            'timeout'         => 30,
+            'curl' => [
+            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+        ],
             'headers' => [
                 'Content-Type' => 'application/json',
             ],

@@ -190,6 +190,17 @@
                           <q-item-section>Entregar</q-item-section>
                         </q-item>
                         <q-item
+                          v-if="props.row.status_id === 1"
+                          clickable
+                          v-close-popup
+                          @click="formChangePrintedService(props.row)"
+                        >
+                          <q-item-section avatar>
+                            <q-icon color="black" name="fa fa-print" />
+                          </q-item-section>
+                          <q-item-section>Cambiar a impreso</q-item-section>
+                        </q-item>
+                        <q-item
                           v-if="props.row.status_id === 2"
                           clickable
                           v-close-popup
@@ -636,6 +647,12 @@
       @update="getListUpdate"
       @close="showFormChangeStatusService = false"
     ></form-change-service-status>
+    <form-change-service-printed
+      :show="showFormConfirmPrinted"
+      :item="item"
+      @update="getListUpdate"
+      @close="showFormConfirmPrinted = false"
+    ></form-change-service-printed>
     <form-confirm-delivery
       :show="showFormConfirmDelivery"
       :item="item"

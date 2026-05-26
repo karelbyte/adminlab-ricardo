@@ -7,10 +7,12 @@ import DoctorAdd from '../../components/DoctorAdd'
 import LocationAdd from '../../components/LocationAdd'
 import FormChangeServiceStatus from '../../components/FormChangeServiceStatus'
 import FormConfirmDelivery from '../../components/FormConfirmDelivery'
+import FormChangeServicePrinted from '../../components/FormChangeServicePrinted'
+
 export default {
   name: 'services',
   components: {
-    DeleteItem, 'barcode': VueBarcode, ClientAdd, DoctorAdd, LocationAdd, FormChangeServiceStatus, tinymce, FormConfirmDelivery
+    DeleteItem, 'barcode': VueBarcode, ClientAdd, DoctorAdd, LocationAdd, FormChangeServiceStatus, FormChangeServicePrinted, tinymce, FormConfirmDelivery
   },
   data () {
     return {
@@ -153,6 +155,15 @@ export default {
           headerClasses: 'bg-primary text-white',
           sortable: true
         },
+        {
+          name: 'printed',
+          required: true,
+          label: 'IMPRESO',
+          align: 'left',
+          field: 'printed',
+          headerClasses: 'bg-primary text-white',
+          sortable: false
+        },
         { name: 'actions', label: 'ACCIONES', field: '', align: 'center', headerClasses: 'bg-primary text-white' }
       ],
       act: 'post',
@@ -205,6 +216,7 @@ export default {
         barcode_quantity: 1,
         discount: 0,
         advance: 0,
+        printed: 0,
         analysis: []
       },
       itemClear: {
@@ -219,6 +231,7 @@ export default {
         discount: 0,
         advance: 0,
         status_id: 1,
+        printed: 0,
         analysis: []
       },
       clients: [],
@@ -275,6 +288,7 @@ export default {
       ],
       showFormChangeStatusService: false,
       showFormConfirmDelivery: false,
+      showFormConfirmPrinted: false,
       locationsSearch: [],
       monthNames: ['E', 'F', 'MA', 'A', 'MY', 'J',
         'JL', 'AG', 'S', 'O', 'N', 'D'
@@ -284,7 +298,8 @@ export default {
       iframe: '',
       fixDescription: false,
       showEmail: false,
-      showChangeStatus: false
+      showChangeStatus: false,
+      showPrintedStatus: false
     }
   },
   watch: {
@@ -366,6 +381,10 @@ export default {
         this.showFormConfirmDelivery = true
         // this.changeStatusService(item)
       }
+    },
+    formChangePrintedService (item) {
+      this.item = item
+      this.showFormConfirmPrinted = true
     },
     changeStatusService (itm) {
       this.showChangeStatus = true

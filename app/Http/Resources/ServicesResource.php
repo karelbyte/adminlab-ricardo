@@ -43,11 +43,12 @@ class ServicesResource extends JsonResource
             'client_id' => $this->client_id,
             'client' => $this->client->names,
             'doctor' => $this->doctor->names,
-            'status_id' => $this->status_id,
+            'status_id' => $this->status_id ,
             'location_id' => $this->location_id,
             'status' => $this->status->description,
             'barcode' => $this->barcode,
             'barcode_quantity' => $this->barcode_quantity,
+            'printed' => $this->printed ? 'IMPRESO' : '',
             'note' => $this->note,
             'analysis' => ServiceDetailsResource::collection($this->analysis),
             'analysis_description' =>  $analisis

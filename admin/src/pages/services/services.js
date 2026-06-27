@@ -7,12 +7,13 @@ import DoctorAdd from '../../components/DoctorAdd'
 import LocationAdd from '../../components/LocationAdd'
 import FormChangeServiceStatus from '../../components/FormChangeServiceStatus'
 import FormConfirmDelivery from '../../components/FormConfirmDelivery'
+import FormConfirmDelivered from '../../components/FormConfirmDelivered'
 import FormChangeServicePrinted from '../../components/FormChangeServicePrinted'
 
 export default {
   name: 'services',
   components: {
-    DeleteItem, 'barcode': VueBarcode, ClientAdd, DoctorAdd, LocationAdd, FormChangeServiceStatus, FormChangeServicePrinted, tinymce, FormConfirmDelivery
+    DeleteItem, 'barcode': VueBarcode, ClientAdd, DoctorAdd, LocationAdd, FormChangeServiceStatus, FormChangeServicePrinted, tinymce, FormConfirmDelivery, FormConfirmDelivered
   },
   data () {
     return {
@@ -164,6 +165,15 @@ export default {
           headerClasses: 'bg-primary text-white',
           sortable: false
         },
+        {
+          name: 'delivered',
+          required: true,
+          label: 'ENTREGA',
+          align: 'left',
+          field: 'delivered',
+          headerClasses: 'bg-primary text-white',
+          sortable: false
+        },
         { name: 'actions', label: 'ACCIONES', field: '', align: 'center', headerClasses: 'bg-primary text-white' }
       ],
       act: 'post',
@@ -217,6 +227,7 @@ export default {
         discount: 0,
         advance: 0,
         printed: 0,
+        delivered: 0,
         analysis: []
       },
       itemClear: {
@@ -232,6 +243,7 @@ export default {
         advance: 0,
         status_id: 1,
         printed: 0,
+        delivered: 0,
         analysis: []
       },
       clients: [],
@@ -288,6 +300,7 @@ export default {
       ],
       showFormChangeStatusService: false,
       showFormConfirmDelivery: false,
+      showFormConfirmDelivered: false,
       showFormConfirmPrinted: false,
       locationsSearch: [],
       monthNames: ['E', 'F', 'MA', 'A', 'MY', 'J',
@@ -381,6 +394,10 @@ export default {
         this.showFormConfirmDelivery = true
         // this.changeStatusService(item)
       }
+    },
+    formChangeDeliveredService (item) {
+      this.item = item
+      this.showFormConfirmDelivered = true
     },
     formChangePrintedService (item) {
       this.item = item

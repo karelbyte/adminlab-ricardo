@@ -89,6 +89,7 @@ Route::prefix('services')->group(function () {
     //  Route::post('get-next', 'getNextNumberClientController@setStatus');
     Route::post('mail', 'ServiceController@sendMail');
     Route::get('setprinted/{id}', 'ServiceController@setprinted');
+    Route::get('setdelivered/{id}', 'ServiceController@setdelivered');
 });
 
 

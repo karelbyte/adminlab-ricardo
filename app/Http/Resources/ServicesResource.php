@@ -49,6 +49,7 @@ class ServicesResource extends JsonResource
             'barcode' => $this->barcode,
             'barcode_quantity' => $this->barcode_quantity,
             'printed' => $this->printed ? 'IMPRESO' : '',
+            'delivered' => $this->delivered ? 'ENTREGADO' : '',
             'note' => $this->note,
             'analysis' => ServiceDetailsResource::collection($this->analysis),
             'analysis_description' =>  $analisis

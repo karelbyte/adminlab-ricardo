@@ -57,6 +57,14 @@ class ServiceController extends Controller
         return response()->json('Se cambio a impreso!');
     }
 
+     public function setDelivered($id) {
+           $service = Service::query()->find($id);
+           $service->delivered = true;
+           $service->save();
+
+        return response()->json('Se cambio a entregado!');
+    }
+
     public function getContent($id) {
         $cont = ServiceDetails::query()->find($id);
         $service = Service::query()->find($cont->service_id);

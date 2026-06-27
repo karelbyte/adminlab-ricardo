@@ -185,7 +185,18 @@
                           @click="formChangeStatusService(props.row)"
                         >
                           <q-item-section avatar>
-                            <q-icon color="green" name="fa fa-envelope" />
+                            <q-icon color="green" name="fa fa-window-close" />
+                          </q-item-section>
+                          <q-item-section>Cerrar servicio</q-item-section>
+                        </q-item>
+                        <q-item
+                          v-if="props.row.status_id === 2"
+                          clickable
+                          v-close-popup
+                          @click="formChangeDeliveredService(props.row)"
+                        >
+                          <q-item-section avatar>
+                            <q-icon color="green" name="fa fa-thumbs-up" />
                           </q-item-section>
                           <q-item-section>Entregar</q-item-section>
                         </q-item>
@@ -659,6 +670,12 @@
       @update="getListUpdate"
       @close="showFormConfirmDelivery = false"
     ></form-confirm-delivery>
+    <form-confirm-delivered
+      :show="showFormConfirmDelivered"
+      :item="item"
+      @update="getListUpdate"
+      @close="showFormConfirmDelivered = false"
+    ></form-confirm-delivered>
     <delete-item
       :showFormDelete="showFormDelete"
       :item="item"

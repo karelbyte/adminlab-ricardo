@@ -244,7 +244,7 @@
         <p>{{$data->barcode}}</p>
     </div>
     <div style="margin:10px 10px 10px 20px;">
-        {!! DNS2D::getBarcodeSVG('http://laboratorioclinicointegral.com/services-admin/'.$data->barcode, 'QRCODE', 5, 5)!!}
+        {!! DNS2D::getBarcodeSVG('https://newbotlab-production.up.railway.app/consulta', 'QRCODE', 5, 5)!!}
       
     </div>
    

@@ -156,7 +156,7 @@
 
     <div class="separator"></div>
     <div class="row txt-center" style="margin-top:40px;">
-        <h2>ORDEN DE SERVICIO</h5>
+        <h2>RECIBO DE PAGO</h5>
     </div>
     <div class="separator"></div>
     <div class="clear"></div>
@@ -231,10 +231,13 @@
         </div>
         @endif
     </div>
-    <div style="margin:30px 10px 40px 10px" class="txt-justify">
+    <!--<div style="margin:30px 10px 40px 10px" class="txt-justify">
        Le sugerimos nuestro servicio de entrega de resultados via <b>Whatsapp</b>, registre nuestro número <b>+52 755 115 6499</b> y salude "Hola".
        <br>Utilice su codigo de servicio <b>{{$data->barcode}}</b><br>
        Nuestro bot le indicará que hacer para obtener sus resultados.
+    </div> -->
+    <div style="margin:30px 10px 40px 10px" class="txt-justify">
+     Puede descargar sus resultados usando el código QR, solo necesita su número telefónico registrado y el siguiente código de servicio <b>{{$data->barcode}}</b><br> 
     </div>
     <div style="border-bottom: 1px solid black; margin-top: -10px;"></div>
     <div class="clear"></div>
